@@ -1,13 +1,22 @@
-import './App.css'
+import "./App.css";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import Goals from "./pages/goals";
 
 function App() {
-
   return (
-   
-    <div>
-      <h1 className='text-red-500'>hello</h1>
-    </div>
-  )
+    <Router>
+      <div>
+        <Routes>
+          <Route path="/goals" element={<Goals />} />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
-export default App
+export default App;
