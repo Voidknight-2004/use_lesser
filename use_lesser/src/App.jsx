@@ -5,9 +5,11 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import Goals from "./pages/goals";
+import Goals from "./pages/Goals";
 import Timer from "./pages/Timer";
 import Navbar from "./components/navbar";
+import Chatbot from "./pages/Chatbot";
+
 
 function App() {
   return (
@@ -17,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/goals" element={<Goals />} />
           <Route path="/timer" element={<Timer/>}/>
+          <Route path="/chatbot" element={<Chatbot />}/>
         </Routes>
       </div>
     </Router>
