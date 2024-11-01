@@ -4,8 +4,9 @@ import { useState } from 'react'
 import { usePoints } from './PointsProvider'
 
 const navigation = [
-  { name: 'Goals', href: '/goals', current: true },
+  { name: 'Daily Goals', href: '/goals', current: true },
   { name: 'Timer', href: '/timer', current: false },
+  {name:'Lazy Bot',href:'/chatbot',current:false},
 ]
 
 function classNames(...classes) {

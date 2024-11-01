@@ -1,5 +1,4 @@
-
-import DailyGoalsTracker from "../components/DailyGoalsTracker";
+import DailyGoalTracker from "../components/DailyGoalTracker";
 
 
 import React from "react";
@@ -7,7 +6,7 @@ import React from "react";
 function Goals() {
   return (
     <div>
-      <DailyGoalsTracker/>
+      <DailyGoalTracker/>
     </div>
   );
 }
