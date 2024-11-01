@@ -1,12 +1,13 @@
-import Navbar from "../components/navbar";
+
+import DailyGoalsTracker from "../components/DailyGoalsTracker";
+
 
 import React from "react";
 
 function Goals() {
   return (
     <div>
-      <Navbar />
-      <h1>hello</h1>
+      <DailyGoalsTracker/>
     </div>
   );
 }
