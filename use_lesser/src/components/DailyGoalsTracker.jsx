@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Check, X } from 'lucide-react';
+import { usePoints } from './PointsProvider';
 
 const DailyGoalsTracker = () => {
   const [goals, setGoals] = useState([]);
   const [newGoal, setNewGoal] = useState('');
+  const {points,setPoints}=usePoints();
 
   // Load goals from local storage on component mount
   useEffect(() => {
@@ -30,6 +32,7 @@ const DailyGoalsTracker = () => {
       id: Date.now(),
       text: newGoal,
       completed: false,
+      points:100,
       date: new Date().toISOString()
     };
 
@@ -38,11 +41,18 @@ const DailyGoalsTracker = () => {
   };
 
   const toggleGoal = (id) => {
-    setGoals(goals.map(goal => 
-      goal.id === id ? { ...goal, completed: !goal.completed } : goal
-    ));
+    setGoals(goals.map(goal => {
+      if (goal.id === id) {
+        if (!goal.completed) {
+          setPoints(prevPoints => prevPoints + goal.points);
+        } else {
+          setPoints(prevPoints => prevPoints - goal.points); 
+        }
+        return { ...goal, completed: !goal.completed };
+      }
+      return goal;
+    }));
   };
-
   const deleteGoal = (id) => {
     setGoals(goals.filter(goal => goal.id !== id));
   };

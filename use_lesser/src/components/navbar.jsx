@@ -1,5 +1,7 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon,Bars4Icon } from '@heroicons/react/24/outline'
+import { useState } from 'react'
+import { usePoints } from './PointsProvider'
 
 const navigation = [
   { name: 'Goals', href: '/goals', current: true },
@@ -11,6 +13,8 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
+  const {points}=usePoints();
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -56,8 +60,8 @@ export default function Navbar() {
               className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
             >
               <span className="absolute -inset-1.5" />
-              <span className="sr-only">View notifications</span>
-              <BellIcon aria-hidden="true" className="h-6 w-6" />
+          
+              <div ><h1  className='pb-1 pr-8 font-semibold text-white text-xl'>{points}</h1></div>
             </button>
 
             {/* Profile dropdown */}
@@ -66,8 +70,8 @@ export default function Navbar() {
                 
                 <MenuButton>
                   <span className="absolute -inset-1.5" />
-                  <span className="sr-only">Open user menu</span>
-                  <Bars3Icon aria-hidden="true" className="block h-6 w-6 group-data-[open]:hidden text-white" />
+                  <span className="sr-only" >Open user menu</span>
+                  <Bars3Icon  aria-hidden="true" className="block h-6 w-6 group-data-[open]:hidden text-white" />
                 </MenuButton>
               </div>
               <MenuItems
