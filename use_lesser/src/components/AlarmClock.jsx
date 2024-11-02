@@ -145,16 +145,16 @@ const AlarmClock = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-4 mt-10 bg-white rounded-lg shadow-md">
+    <div className="max-w-xl mx-auto p-10 mt-10 bg-blue-200 rounded-full shadow-md">
       <div className="flex items-center justify-center mb-6">
-        <Clock size={64} className="mr-4 text-blue-500" />
+        <Clock size={128} className="mr-4 text-blue-500" />
         <h2 className="text-2xl font-bold">
           {formatTime(currentTime)}
         </h2>
       </div>
 
       {/* Add Alarm Section */}
-      <div className="flex mb-4 space-x-2">
+      <div className="flex mb-9 space-x-4 ">
         <input 
           type="time" 
           value={newAlarm.time}
@@ -172,33 +172,33 @@ const AlarmClock = () => {
           onClick={addAlarm}
           className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
         >
-          <Plus size={20} />
+          <Plus size={40} />
         </button>
       </div>
 
       {/* Alarms List */}
       {alarms.length === 0 && (
-        <p className="text-center text-gray-500">No alarms set</p>
+        <p className="text-center text-red-400 font-bold">No alarms set</p>
       )}
 
-      <ul className="space-y-2">
+      <ul className="space-y-2 mx-20 ">
         {alarms.map((alarm) => (
           <li 
             key={alarm.id} 
-            className={`flex items-center justify-between p-2 rounded-md ${
+            className={`flex items-center justify-between p-2 rounded-3xl ${
               alarm.active 
                 ? 'bg-gray-100' 
                 : 'bg-gray-200 opacity-60'
             }`}
           >
-            <div className="flex items-center flex-col items-start">
+            <div className=" flex items-center flex-col ">
               <div className="flex items-center">
-                <span className="font-semibold mr-2">Set for: {alarm.time}</span>
+                <span className="font-bold mr-4 h-8">Set for: {alarm.time}</span>
                 {alarm.label && (
-                  <span className="text-gray-500 text-sm">{alarm.label}</span>
+                  <span className="text-gray-500 text-lg pb-2">{alarm.label}</span>
                 )}
               </div>
-              <span className="text-xs text-gray-500">
+              <span className="text-s text-gray-500">
                 Will ring at: {getActualAlarmTime(alarm.time)}
               </span>
             </div>

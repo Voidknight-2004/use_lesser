@@ -59,8 +59,8 @@ const DailyGoalTracker = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800">Daily Goal Tracker</h1>
+    <div className="max-w-md mx-auto p-6 bg-pink-300 rounded-lg shadow-lg mt-4   ">
+      <h1 className="text-2xl font-bold mb-6 text-pink-400">Daily Goal Tracker</h1>
       
       {goals.map(goal => (
         <div key={goal.id} className="mb-6">
@@ -69,7 +69,7 @@ const DailyGoalTracker = () => {
             <div className="flex items-center space-x-2">
               <button 
                 onClick={() => handleDecrement(goal.id)}
-                className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                className="px-2 py-1 bg-pink-200 text-pink-600 rounded hover:bg-pink-300"
               >
                 -
               </button>
@@ -78,7 +78,7 @@ const DailyGoalTracker = () => {
               </span>
               <button 
                 onClick={() => handleIncrement(goal.id)}
-                className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                className="px-2 py-1 bg-pink-600 text-pink-200 rounded hover:bg-pink-700"
               >
                 +
               </button>
@@ -87,7 +87,7 @@ const DailyGoalTracker = () => {
           
           <div className="w-full bg-gray-200 rounded-full h-2.5">
             <div 
-              className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+              className="bg-pink-600 h-2.5 rounded-full transition-all duration-300"
               style={{ width: `${calculatePercentage(progress[goal.id], goal.target)}%` }}
             ></div>
           </div>

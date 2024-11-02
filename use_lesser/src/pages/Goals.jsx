@@ -5,7 +5,7 @@ import React from "react";
 
 function Goals() {
   return (
-    <div>
+    <div >
       <DailyGoalTracker/>
     </div>
   );
