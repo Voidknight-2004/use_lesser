@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, Plus, Trash2, Bell, BellOff } from 'lucide-react';
-
+import prime from "../audio/prime.mp3"
+import saurav from "../images/useless.jpeg"
 const AlarmClock = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [alarms, setAlarms] = useState([]);
@@ -19,17 +20,37 @@ const AlarmClock = () => {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    if ('Notification' in window) {
+      Notification.requestPermission();
+    }
+  }, []);
+
   // Check alarms
   useEffect(() => {
     const checkAlarms = () => {
       const now = new Date();
-      const currentHours = now.getHours().toString().padStart(2, '0');
-      const currentMinutes = now.getMinutes().toString().padStart(2, '0');
-      const currentTimeString = `${currentHours}:${currentMinutes}`;
-
+      
       alarms.forEach(alarm => {
-        if (alarm.active && alarm.time === currentTimeString) {
+        // Get original alarm time and add 1 hour
+        const [hours, minutes] = alarm.time.split(':').map(Number);
+        const originalAlarmTime = new Date(now);
+        originalAlarmTime.setHours(hours, minutes, 0, 0);
+        
+        // Add one hour to the alarm time
+        const actualAlarmTime = new Date(originalAlarmTime);
+        actualAlarmTime.setHours(actualAlarmTime.getHours() + 1);
+        
+        // Check if current time matches alarm time (within the same minute)
+        if (alarm.active && 
+            now.getHours() === actualAlarmTime.getHours() && 
+            now.getMinutes() === actualAlarmTime.getMinutes() &&
+            !alarm.hasTriggered) {  // Add check to prevent multiple triggers
           triggerAlarm(alarm);
+          // Mark alarm as triggered
+          setAlarms(prevAlarms => prevAlarms.map(a => 
+            a.id === alarm.id ? { ...a, hasTriggered: true } : a
+          ));
         }
       });
     };
@@ -38,27 +59,47 @@ const AlarmClock = () => {
   }, [currentTime, alarms]);
 
   const triggerAlarm = (alarm) => {
-    // Play sound and show notification
-    const audio = new Audio('/api/placeholder/alarm-sound.mp3');
-    audio.play();
+    // Get original time and calculate actual alarm time
+    const [hours, minutes] = alarm.time.split(':').map(Number);
+    const originalTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+    const actualTime = `${String((hours + 1) % 24).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 
-    // Browser notification
-    if ('Notification' in window) {
-      if (Notification.permission === 'granted') {
-        new Notification(alarm.label || 'Alarm', {
-          body: `Alarm set for ${alarm.time}`,
-          icon: '/api/placeholder/alarm-icon.png'
-        });
-      } else if (Notification.permission !== 'denied') {
-        Notification.requestPermission().then(permission => {
-          if (permission === 'granted') {
-            new Notification(alarm.label || 'Alarm', {
-              body: `Alarm set for ${alarm.time}`,
-              icon: '/api/placeholder/alarm-icon.png'
-            });
+    try {
+      // Play sound
+      const audio = new Audio(prime);
+      audio.play().catch(error => console.log('Audio playback error:', error));
+
+      // Show notification
+      if ('Notification' in window) {
+        const notificationOptions = {
+          body: `Alarm set for ${originalTime} has rung at ${actualTime} (1 hour later)`,
+          icon: saurav,
+          requireInteraction: true, // Keep notification until user interacts
+          vibrate: [200, 100, 200] // Vibration pattern
+        };
+
+        // Check if we have permission and send notification
+        if (Notification.permission === 'granted') {
+          try {
+            new Notification(alarm.label || 'Alarm', notificationOptions);
+          } catch (error) {
+            console.log('Notification creation error:', error);
           }
-        });
+        } else {
+          // Request permission again if not granted
+          Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+              try {
+                new Notification(alarm.label || 'Alarm', notificationOptions);
+              } catch (error) {
+                console.log('Notification creation error:', error);
+              }
+            }
+          });
+        }
       }
+    } catch (error) {
+      console.log('Trigger alarm error:', error);
     }
   };
 
@@ -68,7 +109,8 @@ const AlarmClock = () => {
     const alarm = {
       id: Date.now(),
       ...newAlarm,
-      active: true
+      active: true,
+      hasTriggered: false,  // Add flag to track if alarm has triggered
     };
 
     setAlarms([...alarms, alarm]);
@@ -77,12 +119,14 @@ const AlarmClock = () => {
 
   const toggleAlarmActive = (id) => {
     setAlarms(alarms.map(alarm => 
-      alarm.id === id ? { ...alarm, active: !alarm.active } : alarm
+      alarm.id === id ? { ...alarm, active: !alarm.active, hasTriggered: true } : alarm
     ));
   };
 
   const deleteAlarm = (id) => {
     setAlarms(alarms.filter(alarm => alarm.id !== id));
+    
+    
   };
 
   const formatTime = (date) => {
@@ -93,10 +137,17 @@ const AlarmClock = () => {
     });
   };
 
+  // Calculate and format the actual alarm time (1 hour after set time)
+  const getActualAlarmTime = (setTime) => {
+    if (!setTime) return '';
+    const [hours, minutes] = setTime.split(':').map(Number);
+    return `${String((hours + 1) % 24).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+  };
+
   return (
-    <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md">
+    <div className="max-w-xl mx-auto p-4 mt-10 bg-white rounded-lg shadow-md">
       <div className="flex items-center justify-center mb-6">
-        <Clock size={32} className="mr-2 text-blue-500" />
+        <Clock size={64} className="mr-4 text-blue-500" />
         <h2 className="text-2xl font-bold">
           {formatTime(currentTime)}
         </h2>
@@ -140,11 +191,16 @@ const AlarmClock = () => {
                 : 'bg-gray-200 opacity-60'
             }`}
           >
-            <div className="flex items-center">
-              <span className="font-semibold mr-2">{alarm.time}</span>
-              {alarm.label && (
-                <span className="text-gray-500 text-sm">{alarm.label}</span>
-              )}
+            <div className="flex items-center flex-col items-start">
+              <div className="flex items-center">
+                <span className="font-semibold mr-2">Set for: {alarm.time}</span>
+                {alarm.label && (
+                  <span className="text-gray-500 text-sm">{alarm.label}</span>
+                )}
+              </div>
+              <span className="text-xs text-gray-500">
+                Will ring at: {getActualAlarmTime(alarm.time)}
+              </span>
             </div>
             
             <div className="flex items-center space-x-2">
@@ -173,4 +229,4 @@ const AlarmClock = () => {
   );
 };
 
-export default AlarmClock;
+export default AlarmClock

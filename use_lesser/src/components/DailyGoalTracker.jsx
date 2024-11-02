@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { usePoints } from './PointsProvider';
 
 const DailyGoalTracker = () => {
+  const {setPoints}=usePoints();
   const [goals] = useState([
     { id: 1, name: 'Instagram', target: 3, unit: 'hours', current: 0 },
-    { id: 2, name: 'Sleep', target: 10, unit: 'hours', current: 0 }
+    { id: 2, name: 'Sleep', target: 10, unit: 'hours', current: 0 },
+    {id:3,name:'Gym',target:2,unit:'hours',current:0}
   ]);
 
   const [progress, setProgress] = useState(
@@ -11,17 +14,44 @@ const DailyGoalTracker = () => {
   );
 
   const handleIncrement = (goalId) => {
+    if(goalId!=3)
+    {
+    if(!(goals.find(g => g.id === goalId).target===goals.find(g => g.id === goalId).current))
+    {setPoints((prev)=>prev+50)
     setProgress(prev => ({
       ...prev,
       [goalId]: Math.min(prev[goalId] + 0.5, goals.find(g => g.id === goalId).target)
     }));
+  }
+  }
+  else
+  {
+    if(!(goals.find(g => g.id === goalId).target===goals.find(g => g.id === goalId).current))
+     {setPoints((prev)=>prev-50)
+    setProgress(prev => ({
+      ...prev,
+      [goalId]: Math.min(prev[goalId] + 0.5, goals.find(g => g.id === goalId).target)
+    }));
+  }
+  }
   };
 
   const handleDecrement = (goalId) => {
+    if(goalId!=3)
+    {  
+    setPoints((prev)=>prev-50)
     setProgress(prev => ({
       ...prev,
       [goalId]: Math.max(prev[goalId] - 0.5, 0)
     }));
+  }
+  else{
+    setPoints((prev)=>prev+50)
+    setProgress(prev => ({
+      ...prev,
+      [goalId]: Math.max(prev[goalId] - 0.5, 0)
+    }));
+  }
   };
   
   const calculatePercentage = (current, target) => {

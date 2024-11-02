@@ -2,6 +2,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, BellIcon, XMarkIcon,Bars4Icon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import { usePoints } from './PointsProvider'
+import useless from '../images/useless.jpeg'
 
 const navigation = [
   { name: 'Daily Goals', href: '/goals', current: true },
@@ -31,11 +32,12 @@ export default function Navbar() {
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex flex-shrink-0 items-center">
-              {/* <img
+                {/* {<img
                 alt="Your Company"
-                src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
+                src={useless}
                 className="h-8 w-auto"
-              /> */}
+              /> }   */}
+              
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
@@ -62,7 +64,8 @@ export default function Navbar() {
             >
               <span className="absolute -inset-1.5" />
           
-              <div ><h1  className='pb-1 pr-8 font-semibold text-white text-xl'>{points}</h1></div>
+              <div >
+                <h1  className='pb-1 pr-8 font-semibold text-yellow-300'>Lazy Points  {points}</h1></div>
             </button>
 
             {/* Profile dropdown */}
@@ -72,7 +75,11 @@ export default function Navbar() {
                 <MenuButton>
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only" >Open user menu</span>
-                  <Bars3Icon  aria-hidden="true" className="block h-6 w-6 group-data-[open]:hidden text-white" />
+                  {<img
+                alt="Your Company"
+                src={useless}
+                className="h-8 w-auto"
+              /> }
                 </MenuButton>
               </div>
               <MenuItems
@@ -81,12 +88,12 @@ export default function Navbar() {
               >
                 <MenuItem>
                   <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                    Your Profile
+                    Sourav
                   </a>
                 </MenuItem>
                 <MenuItem>
                   <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                    Settings
+                    Lazy Score
                   </a>
                 </MenuItem>
                 <MenuItem>
