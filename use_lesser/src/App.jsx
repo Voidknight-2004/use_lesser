@@ -10,16 +10,16 @@ import Timer from "./pages/Timer";
 import Navbar from "./components/navbar";
 import Chatbot from "./pages/Chatbot";
 
-
 function App() {
   return (
     <Router>
-      <Navbar/>
+      <Navbar />
       <div>
         <Routes>
+          <Route path="/" element={<Goals />} />
           <Route path="/goals" element={<Goals />} />
-          <Route path="/timer" element={<Timer/>}/>
-          <Route path="/chatbot" element={<Chatbot />}/>
+          <Route path="/timer" element={<Timer />} />
+          <Route path="/chatbot" element={<Chatbot />} />
         </Routes>
       </div>
     </Router>
